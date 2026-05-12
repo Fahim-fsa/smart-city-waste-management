@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Report Detail{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0"><i class="bi bi-file-earmark-text me-2 text-success"></i>Report Detail</h4>
+        <a href="{% url 'report_list' %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Back</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="fw-bold">{{ report.title }}</h5>
+                    <span class="status-badge badge-{{ report.status }}">{{ report.get_status_display }}</span>
+                </div>
+                <p class="text-muted">{{ report.description }}</p>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p><i class="bi bi-geo-alt me-2 text-success"></i><strong>Location:</strong> {{ report.location }}</p>
+                        <p><i class="bi bi-person me-2 text-success"></i><strong>Citizen:</strong> {{ report.citizen.name }}</p>
+                        <p><i class="bi bi-calendar me-2 text-success"></i><strong>Date:</strong> {{ report.report_date|date:"d M Y, H:i" }}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        {% if report.approved_by %}
+                        <p><i class="bi bi-check-circle me-2 text-success"></i><strong>Reviewed by:</strong> {{ report.approved_by.name }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% if report.image %}
+            <div class="card p-3 mb-4">
+                <h6 class="fw-bold mb-2">Waste Image</h6>
+                <img src="{{ report.image.url }}" class="img-fluid rounded" style="max-height:350px;object-fit:cover;width:100%;">
+            </div>
+            {% endif %}
+
+            {% if report.completion_image %}
+            <div class="card p-3">
+                <h6 class="fw-bold mb-2">Completion Image</h6>
+                <img src="{{ report.completion_image.url }}" class="img-fluid rounded" style="max-height:350px;object-fit:cover;width:100%;">
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-4">
+            <!-- Admin Actions -->
+            {% if user.role == 'admin' and report.status == 'pending' %}
+            <div class="card p-4 mb-3">
+                <h6 class="fw-bold mb-3">Admin Actions</h6>
+                <form method="post" action="{% url 'report_approve' report.pk %}" class="mb-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success w-100"><i class="bi bi-check-circle me-1"></i>Approve Report</button>
+                </form>
+                <form method="post" action="{% url 'report_reject' report.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger w-100"><i class="bi bi-x-circle me-1"></i>Reject Report</button>
+                </form>
+            </div>
+            {% endif %}
+
+            {% if user.role == 'admin' and report.status == 'approved' %}
+            <div class="card p-4 mb-3">
+                <h6 class="fw-bold mb-3">Assign Task</h6>
+                <a href="{% url 'task_form' %}" class="btn btn-primary w-100"><i class="bi bi-person-check me-1"></i>Assign Volunteer</a>
+            </div>
+            {% endif %}
+
+            <!-- Tasks linked to this report -->
+            {% if report.tasks.all %}
+            <div class="card p-4">
+                <h6 class="fw-bold mb-3">Assigned Tasks</h6>
+                {% for task in report.tasks.all %}
+                <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                    <div>
+                        <div class="fw-semibold small">{{ task.volunteer.name }}</div>
+                        <span class="status-badge badge-{{ task.status }} small">{{ task.get_status_display }}</span>
+                    </div>
+                    <a href="{% url 'task_detail' task.pk %}" class="btn btn-sm btn-outline-primary">View</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
