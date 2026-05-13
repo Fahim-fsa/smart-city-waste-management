@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Analytics Dashboard{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0"><i class="bi bi-bar-chart me-2 text-success"></i>Analytics Dashboard</h4>
+        <a href="{% url 'report_generation' %}" class="btn btn-success">
+            <i class="bi bi-file-earmark-plus me-1"></i>Generate Report
+        </a>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card blue p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div><div class="text-muted small">Total Reports</div><h3 class="fw-bold mb-0">{{ total_reports }}</h3></div>
+                    <i class="bi bi-file-earmark-text text-primary" style="font-size:2rem;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card green p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div><div class="text-muted small">Completed</div><h3 class="fw-bold mb-0">{{ completed_reports }}</h3></div>
+                    <i class="bi bi-check-circle text-success" style="font-size:2rem;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card orange p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div><div class="text-muted small">Pending</div><h3 class="fw-bold mb-0">{{ pending_reports }}</h3></div>
+                    <i class="bi bi-hourglass text-warning" style="font-size:2rem;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card stat-card green p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div><div class="text-muted small">Volunteers</div><h3 class="fw-bold mb-0">{{ total_volunteers }}</h3></div>
+                    <i class="bi bi-person-check text-success" style="font-size:2rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Chart Placeholder -->
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h6 class="fw-bold mb-3">Report Status Overview</h6>
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h6 class="fw-bold mb-3">User Breakdown</h6>
+                <canvas id="userChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-dark fw-bold">
+                    <i class="bi bi-trophy me-2"></i>Reward Points Leaderboard
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for u in leaderboard %}
+                    <div class="list-group-item d-flex align-items-center gap-3">
+                        <span class="fw-bold text-warning" style="width:24px;">
+                            {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}{{ forloop.counter }}{% endif %}
+                        </span>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">{{ u.name }}</div>
+                            <small class="text-muted">{{ u.get_role_display }}</small>
+                        </div>
+                        <span class="badge bg-warning text-dark fs-6">{{ u.reward_points }} pts</span>
+                    </div>
+                    {% empty %}
+                    <div class="list-group-item text-muted text-center py-3">No data yet</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white fw-bold">
+                    <i class="bi bi-file-earmark-bar-graph me-2"></i>Generated Reports
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light"><tr><th>Area</th><th>Total</th><th>Done</th><th>Date</th></tr></thead>
+                        <tbody>
+                            {% for ar in analytics_reports %}
+                            <tr>
+                                <td>{{ ar.area_name }}</td>
+                                <td>{{ ar.total_reports }}</td>
+                                <td>{{ ar.completed_reports }}</td>
+                                <td>{{ ar.generated_date|date:"d M Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center text-muted py-3">No reports generated yet</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// Report Status Chart
+new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Completed', 'Pending', 'In Progress / Others'],
+        datasets: [{
+            data: [{{ completed_reports }}, {{ pending_reports }}, {{ total_tasks }}],
+            backgroundColor: ['#4caf50', '#ff9800', '#2196f3'],
+        }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+});
+// User Chart
+new Chart(document.getElementById('userChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Citizens', 'Volunteers', 'Total Users'],
+        datasets: [{
+            label: 'Count',
+            data: [{{ total_citizens }}, {{ total_volunteers }}, {{ total_users }}],
+            backgroundColor: ['#2196f3', '#4caf50', '#ff9800'],
+        }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+});
+</script>
+{% endblock %}
