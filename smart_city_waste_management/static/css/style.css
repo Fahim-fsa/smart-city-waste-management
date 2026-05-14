@@ -1,0 +1,184 @@
+/* =============================
+   Smart City Waste Management
+   Main Stylesheet
+   ============================= */
+
+:root {
+    --primary: #2e7d32;
+    --primary-light: #4caf50;
+    --primary-dark: #1b5e20;
+    --secondary: #1565c0;
+    --accent: #f57c00;
+    --danger: #c62828;
+    --bg: #f4f6f8;
+    --card-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+/* ---- General ---- */
+body {
+    background: var(--bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a { text-decoration: none; }
+a:hover { text-decoration: none; }
+
+/* ---- Navbar ---- */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+    width: 250px;
+    min-height: calc(100vh - 56px);
+    background: #ffffff;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.07);
+    position: fixed;
+    top: 56px;
+    left: 0;
+    z-index: 99;
+    overflow-y: auto;
+}
+.sidebar .nav-link {
+    color: #444;
+    padding: 10px 22px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+    font-size: 0.92rem;
+}
+.sidebar .nav-link:hover {
+    background: #e8f5e9;
+    color: var(--primary);
+    border-left-color: var(--primary);
+}
+.sidebar .nav-link i { margin-right: 9px; width: 18px; text-align: center; }
+.sidebar-heading {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #9e9e9e;
+    padding: 12px 22px 4px;
+    font-weight: 700;
+}
+
+/* ---- Main Content ---- */
+.main-content {
+    margin-left: 250px;
+    margin-top: 56px;
+    padding: 28px;
+    min-height: calc(100vh - 56px);
+}
+
+/* ---- Cards ---- */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* ---- Stat Cards ---- */
+.stat-card { border-left: 4px solid #ddd; }
+.stat-card.green { border-left-color: var(--primary-light); }
+.stat-card.blue  { border-left-color: var(--secondary); }
+.stat-card.orange { border-left-color: var(--accent); }
+.stat-card.red   { border-left-color: var(--danger); }
+
+/* ---- Status Badges ---- */
+.status-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+.badge-pending     { background: #fff3e0; color: #e65100; }
+.badge-approved    { background: #e8f5e9; color: #1b5e20; }
+.badge-assigned    { background: #e0f7fa; color: #006064; }
+.badge-in_progress { background: #ede7f6; color: #4527a0; }
+.badge-completed   { background: #e3f2fd; color: #0d47a1; }
+.badge-rejected    { background: #ffebee; color: #b71c1c; }
+.badge-accepted    { background: #f3e5f5; color: #6a1b9a; }
+.badge-cancelled   { background: #f5f5f5; color: #616161; }
+
+/* ---- Buttons ---- */
+.btn-success {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+.btn-success:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* ---- Tables ---- */
+.table th { font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.4px; }
+.table td { vertical-align: middle; }
+
+/* ---- Forms ---- */
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 0.2rem rgba(76,175,80,0.2);
+}
+
+/* ---- Progress Bars ---- */
+.progress { border-radius: 10px; }
+.progress-bar { border-radius: 10px; }
+
+/* ---- Hero Section ---- */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+    color: white;
+    padding: 100px 0 80px;
+}
+.hero-section h1 { font-weight: 800; }
+
+/* ---- Footer ---- */
+footer {
+    background: #263238;
+    color: #b0bec5;
+    padding: 36px 0 20px;
+    margin-top: 60px;
+}
+footer a { color: #80cbc4; }
+footer a:hover { color: #fff; }
+
+/* ---- Notification Badge ---- */
+.notif-dot {
+    width: 8px; height: 8px;
+    background: #f44336;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.show { transform: translateX(0); }
+    .main-content { margin-left: 0; padding: 16px; }
+}
+
+/* ---- Misc ---- */
+.avatar-circle {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 1rem;
+}
+.page-link { color: var(--primary); }
+.page-item.active .page-link { background: var(--primary); border-color: var(--primary); }
