@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Contact - Smart City Waste Management{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4"><i class="bi bi-envelope me-2 text-success"></i>Contact Us</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h5 class="fw-bold mb-3">Send a Message</h5>
+                <form>
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" placeholder="Your Name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" placeholder="your@email.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-control" rows="4" placeholder="Your message..."></textarea>
+                    </div>
+                    <button type="button" class="btn btn-success">Send Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h5 class="fw-bold mb-3">Get In Touch</h5>
+                <p><i class="bi bi-geo-alt me-2 text-success"></i>City Hall, Smart City, Bangladesh</p>
+                <p><i class="bi bi-telephone me-2 text-success"></i>+880 1328221010</p>
+                <p><i class="bi bi-envelope me-2 text-success"></i>support@smartwaste.gov.bd</p>
+                <p><i class="bi bi-clock me-2 text-success"></i>Mon–Thurs, 9AM – 5PM</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
