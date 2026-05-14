@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}About - Smart City Waste Management{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2 text-success"></i>About Us</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card p-4">
+                <p>The <strong>Smart City Waste Management</strong> platform is a digital solution designed to make cities cleaner and more livable by connecting citizens, volunteers, and administrators in one unified system.</p>
+                <p>Our mission is to streamline waste reporting, and task management so that no waste issue goes unnoticed or unresolved.</p>
+                <h5 class="fw-bold mt-4">Our Goals</h5>
+                <ul>
+                    <li>Empower citizens to report waste issues easily</li>
+                    <li>Coordinate volunteer cleanup efforts efficiently</li>
+                    <li>Reward community engagement with points and recognition</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 text-center bg-success text-white">
+                <i class="bi bi-recycle" style="font-size:4rem;"></i>
+                <h4 class="mt-3">Join Us Today</h4>
+                <p>Be part of the solution</p>
+                <a href="{% url 'register' %}" class="btn btn-light mt-2">Register Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
