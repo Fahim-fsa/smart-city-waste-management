@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Citizen Dashboard{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h4 class="fw-bold mb-4"><i class="bi bi-speedometer2 me-2 text-success"></i>My Dashboard</h4>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-md-3">
+            <div class="card stat-card blue p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div><div class="text-muted small">My Reports</div><h3 class="fw-bold mb-0">{{ my_reports }}</h3></div>
+                    <i class="bi bi-file-earmark-text text-primary" style="font-size:2rem;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="card stat-card orange p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div><div class="text-muted small">Pending</div><h3 class="fw-bold mb-0">{{ pending_reports }}</h3></div>
+                    <i class="bi bi-hourglass text-warning" style="font-size:2rem;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="card stat-card green p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div><div class="text-muted small">Completed</div><h3 class="fw-bold mb-0">{{ completed_reports }}</h3></div>
+                    <i class="bi bi-check-circle text-success" style="font-size:2rem;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="card stat-card orange p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div><div class="text-muted small">Reward Points</div><h3 class="fw-bold mb-0">{{ reward_points }}</h3></div>
+                    <i class="bi bi-star-fill text-warning" style="font-size:2rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <a href="{% url 'report_form' %}" class="btn btn-success me-2"><i class="bi bi-plus-circle me-1"></i>Submit New Report</a>
+            <a href="{% url 'report_history' %}" class="btn btn-outline-secondary"><i class="bi bi-clock-history me-1"></i>View History</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-success text-white"><i class="bi bi-file-earmark-text me-2"></i>My Recent Reports</div>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr><th>Title</th><th>Location</th><th>Status</th><th>Date</th><th></th></tr>
+                </thead>
+                <tbody>
+                    {% for report in recent_reports %}
+                    <tr>
+                        <td>{{ report.title|truncatechars:35 }}</td>
+                        <td>{{ report.location|truncatechars:25 }}</td>
+                        <td><span class="status-badge badge-{{ report.status }}">{{ report.get_status_display }}</span></td>
+                        <td>{{ report.report_date|date:"d M Y" }}</td>
+                        <td><a href="{% url 'report_detail' report.pk %}" class="btn btn-sm btn-outline-success">View</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="text-center text-muted py-3">No reports submitted yet. <a href="{% url 'report_form' %}">Submit one now!</a></td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
