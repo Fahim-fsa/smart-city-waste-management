@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: smart-city-waste-app
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --no-input
+    startCommand: "gunicorn smart_city_waste_management.wsgi"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
